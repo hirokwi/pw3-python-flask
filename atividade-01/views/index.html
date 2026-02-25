@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Cadastro de Músicas</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #4e73df, #1cc88a);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background-color: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 500px;
+      }
+
+      h1 {
+        color: #333;
+        font-size: 22px;
+        margin-bottom: 20px;
+      }
+
+      p {
+        color: #666;
+        font-size: 16px;
+      }
+
+      button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        background-color: #4e73df;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background-color: #2e59d9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎵 Sistema de Cadastro de Músicas</h1>
+      <p>
+        Uma aplicação para cadastro e organização das suas músicas preferidas!
+      </p>
+      <button onclick="window.location.href = '/form'">Começar</button>
+    </div>
+  </body>
+</html>
