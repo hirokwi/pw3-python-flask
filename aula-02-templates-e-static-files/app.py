@@ -15,13 +15,39 @@ app = Flask(__name__, template_folder='views')
 def home():
     return render_template('index.html')
 
+
+
 @app.route('/games')
 def games():
-    return render_template('games.html')
+
+    titulo = "Warframe"
+    ano = 1999
+    categoria = "RPG"
+    
+    jogadores = ['Eduardo', 'Ana', 'Guilherme', 'Vitor', 'Antonio']
+    
+    return render_template('games.html',
+    titulo = titulo,
+    ano = ano,
+    categoria = categoria,
+    jogadores = jogadores,)
+
+
+
 
 @app.route('/consoles')
 def consoles():
-    return render_template('consoles.html')
+    nome = "Nintendo Switch"
+    lançamento = 1969
+    marca = "Nintendo"
+    
+    consoles = ['PS4', 'Xbox', 'Nintendo Switch', 'PS5', 'PS1']
+    
+    return render_template('consoles.html',
+    nome = nome,
+    lançamento = lançamento,
+    marca = marca,
+    consoles = consoles,)
 
 
 # Iniciando o servidor web

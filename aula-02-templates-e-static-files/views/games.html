@@ -1,11 +1,23 @@
 {% extends 'base.html' %} {% block content %}
-<h1>Jogos em destaque</h1>
-<img
-  src="{{url_for('static', filename='/imgs/games.webp')}}"
-  alt=""
-  width="720px"
-/>
-<hr />
 
+<main>
+  <h1>Jogos em destaque</h1>
+  <hr />
+  <ul>
+    <li>Título: {{ titulo }}</li>
+    <li>Categoria: {{ categoria }}</li>
+    <li>Ano: {{ ano }}</li>
+
+    <p>O jogo {{titulo}} tem {{ 2026 - ano }} ano(s).</p>
+
+<h3>Top players - Ranking</h3>
+    {% for jogador in jogadores %}
+      <li>{{jogador}}</li>
+    {% endfor %}
+  </ul>
+
+  
+  <hr />
+</main>
 
 {% endblock content %}
