@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/static/css/style_dados.css">
+<title>Lista</title>
+</head>
+
+<body>
+
+<button class="home-btn" onclick="window.location.href='/'">🏠</button>
+
+<div class="list-container">
+
+  <h1>🎵 Minhas Músicas Favoritas</h1>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Música</th>
+          <th>Artista</th>
+          <th>Gênero</th>
+          <th>Duração</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for musica in musicas %}
+        <tr>
+          <td>{{ musica.nome }}</td>
+          <td>{{ musica.artista }}</td>
+          <td>{{ musica.genero }}</td>
+          <td>{{ musica.duracao }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <button class="button-voltar" onclick="window.location.href='/form'">
+    Voltar ao formulário
+  </button>
+
+</div>
+
+</body>
+</html>

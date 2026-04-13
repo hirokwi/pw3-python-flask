@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <title>Cadastro</title>
+  </head>
+
+  <body>
+    <button class="home-btn" onclick="window.location.href = '/'">🏠</button>
+
+    <div class="form-container">
+      <div class="form-box">
+        <img src="/static/imgs/logo.webp" class="logo" />
+
+        <h1>Cadastro de Música</h1>
+
+        <form action="/cadastrar" method="POST">
+
+          <!-- NOME -->
+          <label>Nome da Música</label>
+          <input 
+            type="text" 
+            name="nome" 
+            placeholder="Ex: Blinding Lights" 
+            minlength="2"
+            required 
+          />
+
+          <!-- ARTISTA -->
+          <label>Artista</label>
+          <input 
+            type="text" 
+            name="artista" 
+            placeholder="Ex: The Weeknd"
+            minlength="2"
+            required 
+          />
+
+          <!-- GÊNERO MELHORADO -->
+          <label>Gênero</label>
+          <select name="genero" required>
+            <option value="">Selecione</option>
+
+            <optgroup label="Pop">
+              <option>Pop</option>
+              <option>K-Pop</option>
+              <option>Synth Pop</option>
+            </optgroup>
+
+            <optgroup label="Rock">
+              <option>Rock</option>
+              <option>Indie Rock</option>
+              <option>Hard Rock</option>
+              <option>Grunge</option>
+            </optgroup>
+
+            <optgroup label="Urbano">
+              <option>Rap</option>
+              <option>Trap</option>
+              <option>Hip Hop</option>
+            </optgroup>
+
+            <optgroup label="Brasil">
+              <option>Sertanejo</option>
+              <option>Funk</option>
+              <option>Pagode</option>
+              <option>Bossa Nova</option>
+            </optgroup>
+
+            <option>Outro</option>
+          </select>
+
+          <!-- DURAÇÃO COM MÁSCARA -->
+          <label>Duração</label>
+          <input 
+            type="text" 
+            name="duracao" 
+            id="duracao"
+            placeholder="00:00"
+            maxlength="5"
+            required 
+          />
+
+          <button type="submit">Cadastrar</button>
+        </form>
+
+        <button onclick="window.location.href = '/list'">
+          Ver lista
+        </button>
+      </div>
+    </div>
+
+    <!-- SCRIPT MÁSCARA -->
+    <script>
+      const duracao = document.getElementById("duracao");
+
+      duracao.addEventListener("input", function () {
+        let valor = duracao.value.replace(/\D/g, "");
+
+        if (valor.length > 4) {
+          valor = valor.slice(0, 4);
+        }
+
+        if (valor.length >= 3) {
+          valor = valor.replace(/(\d{2})(\d+)/, "$1:$2");
+        }
+
+        duracao.value = valor;
+      });
+
+      // VALIDAÇÃO EXTRA (evita 99:99 zoado)
+      document.querySelector("form").addEventListener("submit", function(e) {
+        const val = duracao.value.split(":");
+
+        if (val.length !== 2) {
+          alert("Formato inválido. Use mm:ss");
+          e.preventDefault();
+          return;
+        }
+
+        let min = parseInt(val[0]);
+        let seg = parseInt(val[1]);
+
+        if (seg >= 60) {
+          alert("Segundos devem ser menores que 60");
+          e.preventDefault();
+        }
+      });
+    </script>
+
+  </body>
+</html>
