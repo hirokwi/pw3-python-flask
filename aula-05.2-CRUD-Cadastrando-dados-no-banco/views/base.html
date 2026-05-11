@@ -2,13 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+
+    <title>The Games</title>
+
     <!-- importando css -->
     <link
       rel="stylesheet"
-      href="{{url_for('static', filename='css/styles.css')}}"
+      href="{{ url_for('static', filename='css/styles.css') }}"
     />
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -16,15 +20,21 @@
       crossorigin="anonymous"
     />
   </head>
+
   <body>
-    <header>
-      <img src="{{url_for('static', filename='imgs/thegames_logo.png')}}" alt="Logo" width="300px" />
+    <header class="text-center mt-3">
+      <img
+        src="{{ url_for('static', filename='imgs/thegames_logo.png') }}"
+        alt="Logo"
+        width="300px"
+      />
     </header>
 
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="{{url_for('home')}}">The Games</a>
+        <a class="navbar-brand" href="{{ url_for('home') }}"> The Games </a>
+
         <button
           class="navbar-toggler"
           type="button"
@@ -36,29 +46,50 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{url_for('home')}}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{url_for('games')}}"
-                >Games</a
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="{{ url_for('home') }}"
               >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{url_for('consoles')}}">Consoles</a>
-            </li>
-
-             <li class="nav-item">
-              <a class="nav-link" href="{{url_for('cadgames')}}">Cadastrar Jogo</a>
+                Home
+              </a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="{{url_for('estoque_jogos')}}">Estoque de Jogos</a>
+              <a class="nav-link active" href="{{ url_for('games') }}">
+                Games
+              </a>
             </li>
-            
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('consoles') }}">
+                Consoles
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('cadgames') }}">
+                Cadastrar Jogo
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('estoque_jogos') }}">
+                Estoque de Jogos
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('estoque_consoles') }}">
+                Estoque de Consoles
+              </a>
+            </li>
           </ul>
+
           <form class="d-flex" role="search">
             <input
               class="form-control me-2"
@@ -66,6 +97,7 @@
               placeholder="Search"
               aria-label="Search"
             />
+
             <button class="btn btn-outline-success" type="submit">
               Search
             </button>
@@ -76,11 +108,19 @@
 
     <!-- aqui irá o conteúdo das outras páginas -->
     {% block content %} {% endblock content %}
+
     <footer>
       <hr />
+
       <p style="text-align: center">
         &copy; 2026 - The Games - Todos os direitos reservados.
       </p>
     </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

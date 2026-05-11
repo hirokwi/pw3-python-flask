@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for
 from model.game import listar_games, adicionar_game
-from model.database import Game, db
+from model.database import Game, Console, db
 
 
 def init_app(app):
@@ -88,3 +88,41 @@ def init_app(app):
             db.session.commit()
 
         return redirect(url_for('estoque_jogos'))
+
+    @app.route('/estoque_consoles', methods=['GET', 'POST'])
+    def estoque_consoles():
+
+        if request.method == 'POST':
+
+            dados_form = request.form.to_dict()
+
+            newConsole = Console(
+                nome=dados_form['nome'],
+                fabricante=dados_form['fabricante'],
+                ano=dados_form['ano'],
+                preco=dados_form['preco'],
+                quantidade=dados_form['quantidade']
+            )
+
+            db.session.add(newConsole)
+            db.session.commit()
+
+            return redirect(url_for('estoque_consoles'))
+
+        consoles = Console.query.all()
+
+        return render_template(
+            'estoque_consoles.html',
+            consoles=consoles
+        )
+
+    @app.route('/estoque_consoles/delete/<int:id>')
+    def deletar_console(id):
+
+        console = Console.query.get(id)
+
+        if console:
+            db.session.delete(console)
+            db.session.commit()
+
+        return redirect(url_for('estoque_consoles'))
