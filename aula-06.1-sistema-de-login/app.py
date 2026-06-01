@@ -8,12 +8,16 @@ from model.database import db, Game
 # Declarando variável do banco
 DB_NAME = "thegames"
 
+
+
 # Carregando o Flask
 app = Flask(__name__, template_folder='views')
 
 # Configurações do banco
 app.config['DATABASE_NAME'] = DB_NAME
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://root@localhost/{DB_NAME}'
+
+app.config['SECRET_KEY'] = 'meusegredo'
 
 # Inicializando rotas
 routes.init_app(app)
