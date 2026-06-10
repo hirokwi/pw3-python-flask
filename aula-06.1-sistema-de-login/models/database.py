@@ -1,17 +1,12 @@
-# pip install pymysql
-# pip install flask-sqlalchemy
-
+# Importando o Flask-SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
-
-
-# carregando sqlalchemy em uma variavel
+# Carregando o SQLAlchemy em uma variável
 db = SQLAlchemy()
 
-
-# criando uma classe para representar a entidade Games no banco (tabela: games)
-
+# Criando uma classe para representar a entidade Games no banco
 class Game(db.Model):
-
+    # Definindo os atributos (colunas) da tabela
+    # Schema
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(150))
     ano = db.Column(db.Integer)
@@ -19,50 +14,42 @@ class Game(db.Model):
     plataforma = db.Column(db.String(150))
     preco = db.Column(db.Float)
     quantidade = db.Column(db.Integer)
-
-    # metodo construtor
-
+    
+    # Inicializando as variáveis na classe (método construtor)
     def __init__(self, titulo, ano, categoria, plataforma, preco, quantidade):
-
         self.titulo = titulo
         self.ano = ano
         self.categoria = categoria
         self.plataforma = plataforma
         self.preco = preco
         self.quantidade = quantidade
-
-
-# criando uma classe para representar a entidade Consoles
-
+        
 class Console(db.Model):
-
+    # Definindo os atributos (colunas) da tabela
+    # Schema
     id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(150))
-    fabricante = db.Column(db.String(150))
+    titulo = db.Column(db.String(150))
     ano = db.Column(db.Integer)
+    categoria = db.Column(db.String(150))
+    plataforma = db.Column(db.String(150))
     preco = db.Column(db.Float)
     quantidade = db.Column(db.Integer)
-
-    # metodo construtor
-
-    def __init__(self, nome, fabricante, ano, preco, quantidade):
-
-        self.nome = nome
-        self.fabricante = fabricante
+    
+    # Inicializando as variáveis na classe (método construtor)
+    def __init__(self, titulo, ano, categoria, plataforma, preco, quantidade):
+        self.titulo = titulo
         self.ano = ano
+        self.categoria = categoria
+        self.plataforma = plataforma
         self.preco = preco
         self.quantidade = quantidade
         
-        # criando uma classe para representar a entidade Usuarios
-
 class Usuario(db.Model):
-
+    # Atributos
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(80), unique=True, nullable=False)
     senha = db.Column(db.String(255), nullable=False)
-
-    # metodo construtor
+    
     def __init__(self, email, senha):
-
         self.email = email
         self.senha = senha

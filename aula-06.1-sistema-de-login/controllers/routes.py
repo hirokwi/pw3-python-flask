@@ -1,95 +1,154 @@
-from flask import render_template, request, redirect, url_for, flash
-from model.game import listar_games, adicionar_game
-from markupsafe import Markup
-from model.database import Game, Console, db, Usuario
-from werkzeug.security import generate_password_hash
+# Importando o Flask para a aplicação
+from flask import render_template, request, redirect, url_for, flash, session
+
+# Importando o Model de Games
+from models.database import Game, db, Console, Usuario
+
+# Importando a biblioteca Werkzeug
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
+# Criando a função principal para inicializar as rotas
 def init_app(app):
 
-    # Página inicial
+    # VARIÁVEIS GLOBAIS
+    listaConsoles = [
+        'Playstation 5',
+        'Xbox One',
+        'Super Nintendo',
+        'Atari',
+        '3DS'
+    ]
+
+    listaGames = [
+        {
+            "titulo": "CS-GO",
+            "ano": 2012,
+            "categoria": "FPS Online",
+            "plataforma": "PC (Windows)"
+        }
+    ]
+
+    # ROTA PRINCIPAL
     @app.route('/')
     def home():
         return render_template('index.html')
 
-    # Página de games
+    # ROTA GAMES
     @app.route('/games')
     def games():
+        titulo = "Portal 2"
+        ano = 2011
+        categoria = "Puzzle"
+
+        jogadores = [
+            'Marcos',
+            'Richard',
+            'Miguel',
+            'Renato',
+            'Pedro'
+        ]
+
         return render_template(
             'games.html',
-            game={
-                "titulo": "Warframe",
-                "ano": 1999,
-                "categoria": "RPG"
-            },
-            jogadores=['Eduardo', 'Ana', 'Guilherme', 'Vitor', 'Antonio']
+            titulo=titulo,
+            ano=ano,
+            categoria=categoria,
+            jogadores=jogadores
         )
 
-    # Página de consoles
-    @app.route('/consoles')
+    # ROTA CONSOLES
+    @app.route('/consoles', methods=['GET', 'POST'])
     def consoles():
+
+        console = {
+            "Nome": "Playstation 2",
+            "Fabricante": "Sony",
+            "Ano": 2000
+        }
+
+        if request.method == 'POST':
+            novo_console = request.form.get('novoConsole')
+
+            if novo_console:
+                listaConsoles.append(novo_console)
+
         return render_template(
             'consoles.html',
-            nome="Nintendo Switch",
-            lançamento=1969,
-            marca="Nintendo",
-            consoles=['PS4', 'Xbox', 'Nintendo Switch', 'PS5', 'PS1']
+            console=console,
+            listaConsoles=listaConsoles
         )
 
-    # Cadastro simples de games
+    # ROTA CADASTRO DE GAMES
     @app.route('/cadgames', methods=['GET', 'POST'])
     def cadgames():
 
         if request.method == 'POST':
 
-            titulo = request.form.get('titulo')
-            ano = request.form.get('ano')
-            categoria = request.form.get('categoria')
-
-            if titulo and ano and categoria:
-                adicionar_game(titulo, ano, categoria)
+            listaGames.append({
+                'titulo': request.form.get('titulo'),
+                'ano': request.form.get('ano'),
+                'categoria': request.form.get('categoria'),
+                'plataforma': request.form.get('plataforma')
+            })
 
             return redirect(url_for('cadgames'))
 
         return render_template(
             'cadgames.html',
-            listaGames=listar_games()
+            listaGames=listaGames
         )
 
-    # Estoque de jogos
-    @app.route('/estoque_jogos', methods=['GET', 'POST'])
-    def estoque_jogos():
+    # ROTA ESTOQUE
+    @app.route('/estoque', methods=['GET', 'POST'])
+    @app.route('/estoque/delete/<int:id>')
+    def estoque(id=None):
 
+        # DELETE
+        if id is not None:
+            game = Game.query.get(id)
+
+            if game:
+                db.session.delete(game)
+                db.session.commit()
+
+            return redirect(url_for('estoque'))
+
+        # CREATE
         if request.method == 'POST':
 
-            dados_form = request.form.to_dict()
+            dados = request.form.to_dict()
 
-            newGame = Game(
-                titulo=dados_form['titulo'],
-                ano=dados_form['ano'],
-                categoria=dados_form['categoria'],
-                plataforma=dados_form['plataforma'],
-                preco=dados_form['preco'],
-                quantidade=dados_form['quantidade']
+            newgame = Game(
+                dados['titulo'],
+                dados['ano'],
+                dados['categoria'],
+                dados['plataforma'],
+                dados['preco'],
+                dados['quantidade']
             )
 
-            db.session.add(newGame)
+            db.session.add(newgame)
             db.session.commit()
 
-            return redirect(url_for('estoque_jogos'))
+            return redirect(url_for('estoque'))
 
+        # READ
         games = Game.query.all()
 
         return render_template(
-            'estoque_jogos.html',
+            'estoque.html',
             games=games
         )
 
-    # Editar jogo
-    @app.route('/editar_jogos/<int:id>', methods=['GET', 'POST'])
-    def editar_jogos(id):
+    # ROTA EDITAR GAME
+    @app.route('/estoque/editar/<int:id>', methods=['GET', 'POST'])
+    def editar(id):
 
         game = Game.query.get(id)
+
+        if not game:
+            return redirect(url_for('estoque'))
 
         if request.method == 'POST':
 
@@ -104,14 +163,14 @@ def init_app(app):
 
             db.session.commit()
 
-            return redirect(url_for('estoque_jogos'))
+            return redirect(url_for('estoque'))
 
         return render_template(
-            'editar_jogos.html',
+            'editGame.html',
             game=game
         )
 
-    # Cadastro de usuário
+    # ROTA DE CADASTRO
     @app.route('/cadastro', methods=['GET', 'POST'])
     def cadastro():
 
@@ -119,87 +178,58 @@ def init_app(app):
 
             email = request.form['email']
             senha = request.form['senha']
-            
-            usuario = Usuario.query.filter_by(email=email).first()
-            
-            if usuario:
-                msg = Markup("Usuário já cadastrado. Faça o <a href='/login'>login</a>")
-                flash(msg, 'danger')
-                return redirect(url_for('cadastro'))
 
-            senha_criptografada = generate_password_hash(
+            senha_com_hash = generate_password_hash(
                 senha,
                 method='scrypt'
             )
 
             novo_usuario = Usuario(
                 email=email,
-                senha=senha_criptografada
+                senha=senha_com_hash
             )
 
             db.session.add(novo_usuario)
             db.session.commit()
-            
-            msgCad = Markup("Cadastro realizado com sucesso! Faça o <a href='/login'>login</a>")
-            flash(msgCad, 'succes')
 
-            return redirect(url_for('cadastro'))
+            flash('Cadastro realizado com sucesso!', 'success')
+
+            return redirect(url_for('login'))
 
         return render_template('cadastro.html')
 
-    # Login
+    # ROTA DE LOGIN
     @app.route('/login', methods=['GET', 'POST'])
     def login():
-        return "Bem vindo à página de login!"
-
-    # Deletar jogo
-    @app.route('/estoque_jogos/delete/<int:id>')
-    def deletar_jogo(id):
-
-        game = Game.query.get(id)
-
-        if game:
-            db.session.delete(game)
-            db.session.commit()
-
-        return redirect(url_for('estoque_jogos'))
-
-    # Estoque de consoles
-    @app.route('/estoque_consoles', methods=['GET', 'POST'])
-    def estoque_consoles():
 
         if request.method == 'POST':
 
-            dados_form = request.form.to_dict()
+            email = request.form['email']
+            senha = request.form['senha']
 
-            newConsole = Console(
-                nome=dados_form['nome'],
-                fabricante=dados_form['fabricante'],
-                ano=dados_form['ano'],
-                preco=dados_form['preco'],
-                quantidade=dados_form['quantidade']
-            )
+            usuario = Usuario.query.filter_by(
+                email=email
+            ).first()
 
-            db.session.add(newConsole)
-            db.session.commit()
+            if usuario:
 
-            return redirect(url_for('estoque_consoles'))
+                if check_password_hash(
+                    usuario.senha,
+                    senha
+                ):
+                    session['usuario_id'] = usuario.id
+                    session['usuario_email'] = usuario.email
 
-        consoles = Console.query.all()
+                    flash(
+                        'Login realizado com sucesso!',
+                        'success'
+                    )
 
-        return render_template(
-            'estoque_consoles.html',
-            consoles=consoles
-        )
+                    return redirect(url_for('home'))
 
-    # Deletar console
-    @app.route('/estoque_consoles/delete/<int:id>')
-    def deletar_console(id):
+                flash('Senha incorreta!', 'danger')
 
-        console = Console.query.get(id)
+            else:
+                flash('Usuário não encontrado!', 'danger')
 
-        if console:
-            db.session.delete(console)
-            db.session.commit()
-
-        return redirect(url_for('estoque_consoles'))
+        return render_template('login.html')

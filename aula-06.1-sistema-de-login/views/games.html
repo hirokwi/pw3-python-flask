@@ -1,33 +1,21 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <main>
-  <h1>Jogos em destaque</h1>
-  <hr />
-
-  <ul>
-  <li>Título: {{ game.titulo }}</li>
-  <li>Categoria: {{ game.categoria }}</li>
-  <li>Ano: {{ game.ano }}</li>
-</ul>
-
-<p>O jogo {{ game.titulo }} tem {{ 2026 - game.ano }} ano(s).</p>
-
-  <h3>Top players - Ranking</h3>
-  <ul>
-    {% for jogador in jogadores %}
-      <li>{{ jogador }}</li>
-    {% endfor %}
-  </ul>
-
-  <h3>Jogo do ano</h3>
-  {% for chave, valor in game.items() %}
-    <details>
-      <summary>{{ chave }}</summary>
-      <p>{{ valor }}</p>
-    </details>
-  {% endfor %}
-
-  <hr />
+    <h1>Games</h1>
+    <h2>Jogo em destaque</h2>
+    <p>Game mais jogado pelos nossos usuários:</p>
+    <ul>
+        {# Este é um comentário em Jinja2 (Python e Flask) #}
+        <li>Título: <strong>{{titulo}}</strong></li>
+        <li>Ano: <strong>{{ano}}</strong></li>
+        <li>Categoria: <strong>{{ categoria }}</strong></li>
+        <p>O jogo {{titulo}} tem {{2026 - ano}} anos!</p>
+    </ul>
+    <h3>Top Players (Ranking de jogadores)</h3>
+    <ol>
+        {% for jogador in jogadores: %}
+        <li>{{ jogador }}</li>
+        {% endfor %}
+    </ol>
 </main>
-{% endblock content %}r
+{% endblock content %}
