@@ -1,29 +1,17 @@
+<!-- Importando o template base -->
 {% extends 'base.html' %}
+
 {% block content %}
+
 <main>
-    <h1>Consoles</h1>
-    <hr>
-    <h2>Console em destaque:</h2>
-
-    {% for chave, valor in console.items() %}
-    <details>
-        <summary>{{ chave }}</summary>
-        <p>{{ valor }}</p>
-    </details>
-    {% endfor %}
-
-    <h2>Lista de Consoles</h2>
+    <h1>Consoles em destaque</h1>
     <ol>
-        {% for c in listaConsoles %}
-        <li>{{ c }}</li>
+        {% for console in consoles %}
+        <li>{{ console }}</li>
         {% endfor %}
     </ol>
-
-    <form action="{{url_for('consoles')}}" , method="POST">
-        <label>Nome do console:</label>
-        <input type="text" name="novoConsole">
-        <input type="submit" value="Cadastrar">
-    </form>
-
+    <hr>
+    <p><a href="/">Voltar</a></p>
 </main>
+
 {% endblock content %}

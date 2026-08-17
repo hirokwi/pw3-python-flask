@@ -1,167 +1,142 @@
-# Importando o Flask para a aplicação
-from flask import render_template, request, redirect, url_for, flash, session
+# Importando o render_template
+# Motor para renderizar as páginas
+from flask import render_template, request, redirect, url_for
 
-# Importando o Model de Games
 from models.database import Game, db, Console, Usuario
 
-# Importando a biblioteca Werkzeug
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 
-# Importanto a biblioteca URLLIB
-import urllib.request  # permite enviar requisições para um URL
+#Importando a biblioteca URLLIB
+import urllib.request
 
-# Importando a biblioteca JSON
-import json # converte dados de dicionário para JSON e vice-versa
+# importando a biblioteca JSON
+import json 
 
-# I
-
-
-# Criando a função principal para inicializar as rotas
+# Criando a função para receber o Flask (app)
 def init_app(app):
+    # SIMULANDO UM BANCO DE DADOS
+    listaGames = [{"titulo": "CS-GO", "ano": 2012, "categoria": "FPS Online"}]
 
-    # VARIÁVEIS GLOBAIS
-    listaConsoles = [
-        'Playstation 5',
-        'Xbox One',
-        'Super Nintendo',
-        'Atari',
-        '3DS'
-    ]
+    # A partir daqui virão as rotas
 
-    listaGames = [
-        {
-            "titulo": "CS-GO",
-            "ano": 2012,
-            "categoria": "FPS Online",
-            "plataforma": "PC (Windows)"
-        }
-    ]
-
-    # ROTA PRINCIPAL
+    # CRIANDO A ROTA PRINCIPAL DO SITE
     @app.route('/')
+    # def serve para criar funções no Python
     def home():
         return render_template('index.html')
 
-    # ROTA GAMES
+    # CRIANDO A ROTA DE GAMES
     @app.route('/games')
     def games():
-        titulo = "Portal 2"
-        ano = 2011
-        categoria = "Puzzle"
+        # Criando variáveis para passar as informações de um jogo
+        titulo = "Silk Song"
+        ano = 2025
+        categoria = "Metroid Van"
 
-        jogadores = [
-            'Marcos',
-            'Richard',
-            'Miguel',
-            'Renato',
-            'Pedro'
-        ]
+        # Criando um objeto Python (dicionário) para representar as propriedades de um jogo
+        game = {
+            "Título": "Minecraft",
+            "Ano": 2012,
+            "Categoria": "Sandbox"
+        }
+
+        # Criando vetor (lista)
+        jogadores = ['Eduardo', 'Ana', 'Guilherme', 'Vitor', 'Antônio']
 
         return render_template(
             'games.html',
+            # Enviando as variáveis para página HTML
             titulo=titulo,
             ano=ano,
             categoria=categoria,
-            jogadores=jogadores
+            jogadores=jogadores,
+            game=game
         )
 
-    # ROTA CONSOLES
-    @app.route('/consoles', methods=['GET', 'POST'])
+    # CRIANDO A ROTA DE CONSOLES
+    @app.route('/consoles')
     def consoles():
-
-        console = {
-            "Nome": "Playstation 2",
-            "Fabricante": "Sony",
-            "Ano": 2000
-        }
-
-        if request.method == 'POST':
-            novo_console = request.form.get('novoConsole')
-
-            if novo_console:
-                listaConsoles.append(novo_console)
+        # Criando vetor (lista)
+        consoles = [
+            'Xbox',
+            'Playstation 5',
+            'Super Nintendo',
+            'Gameboy',
+            'Atari'
+        ]
 
         return render_template(
             'consoles.html',
-            console=console,
-            listaConsoles=listaConsoles
+            consoles=consoles
         )
 
-    # ROTA CADASTRO DE GAMES
+    # ROTA DE CADASTRO DE JOGOS
     @app.route('/cadgames', methods=['GET', 'POST'])
     def cadgames():
-
+        # Verificando se o método da requisição é POST
         if request.method == 'POST':
+            # Recebendo os dados do formulário e gravando na lista
+            listaGames.append({'titulo' : request.form.get('titulo'), 'ano' : request.form.get('ano'), 'categoria' : request.form.get('categoria')})
 
-            listaGames.append({
-                'titulo': request.form.get('titulo'),
-                'ano': request.form.get('ano'),
-                'categoria': request.form.get('categoria'),
-                'plataforma': request.form.get('plataforma')
-            })
-
+            # o método append() adiciona valores a lista
             return redirect(url_for('cadgames'))
 
         return render_template(
             'cadgames.html',
-            listaGames=listaGames
+            listaGames = listaGames
         )
 
-    # ROTA ESTOQUE
-    @app.route('/estoque', methods=['GET', 'POST'])
-    @app.route('/estoque/delete/<int:id>')
-    def estoque(id=None):
-
-        # DELETE
-        if id is not None:
-            game = Game.query.get(id)
-
-            if game:
-                db.session.delete(game)
-                db.session.commit()
-
-            return redirect(url_for('estoque'))
-
-        # CREATE
-        if request.method == 'POST':
-
-            dados = request.form.to_dict()
-
-            newgame = Game(
-                dados['titulo'],
-                dados['ano'],
-                dados['categoria'],
-                dados['plataforma'],
-                dados['preco'],
-                dados['quantidade']
-            )
-
-            db.session.add(newgame)
+    # rota de estoque de jogos (crud)
+    @app.route("/estoque_jogos", methods=['GET', 'POST'])
+    # criando um parametro na rota (ID) para excluir um registro
+    @app.route("/estoque_jogos/delete/<int:id>")
+    def estoque_jogos(id=None):
+        #verificando se esta sendo enviado o parametro id para a rota
+        if id:
+            game = Game.query.get(id) #SELECT no banco
+            db.session.delete(game)
             db.session.commit()
 
-            return redirect(url_for('estoque'))
+            return redirect(url_for('estoque_jogos'))
 
-        # READ
+        #verificando se a requisição é do tipo post
+        if request.method == 'POST':
+            # coletando os dados preenchidos no formulario
+            dados_form = request.form.to_dict()
+
+            #enviando dados para Model
+            newGame = Game(
+                dados_form['titulo'],
+                dados_form['ano'],
+                dados_form['categoria'],
+                dados_form['plataforma'],
+                dados_form['preco'],
+                dados_form['quantidade'],
+            )
+
+            #Método do SQLAlchemy para grravar os dados no banco
+            db.session.add(newGame)
+
+            #confirmando a alteração no banco
+            db.session.commit()
+
+            #redirecionando o usuario para a pagina de estoque
+            return redirect(url_for('estoque_jogos'))
+
+        #selecionando toddos os jogos do banco
+        #select * from games
         games = Game.query.all()
 
-        return render_template(
-            'estoque.html',
-            games=games
-        )
+        return render_template('estoque_jogos.html', games=games)
 
-    # ROTA EDITAR GAME
-    @app.route('/estoque/editar/<int:id>', methods=['GET', 'POST'])
-    def editar(id):
+    @app.route('/editar_jogos/<int:id>', methods=['GET'])
+    def editar_jogos(id):
+        return render_template('editar_jogos.html')
 
         game = Game.query.get(id)
 
-        if not game:
-            return redirect(url_for('estoque'))
-
         if request.method == 'POST':
-
             dados_form = request.form.to_dict()
-
             game.titulo = dados_form['titulo']
             game.ano = dados_form['ano']
             game.categoria = dados_form['categoria']
@@ -173,80 +148,104 @@ def init_app(app):
 
             return redirect(url_for('estoque'))
 
-        return render_template(
-            'editGame.html',
-            game=game
-        )
+        return render_template('editar_jogos.html', game=game)
 
-    # ROTA DE CADASTRO
-    @app.route('/cadastro', methods=['GET', 'POST'])
-    def cadastro():
+        #Tentativa de criar ESTOQUE CONSOLES
 
+    # rota de estoque de jogos (crud)
+    @app.route("/estoque-consoles", methods=['GET', 'POST'])
+    # criando um parametro na rota (ID) para excluir um registro
+    @app.route("/estoque-consoles/delete/<int:id>")
+    def estoque_console(id=None):
+        #verificando se esta sendo enviado o parametro id para a rota
+        if id:
+            Console = Console.query.get(id) #SELECT no banco
+            db.session.delete(Console)
+            db.session.commit()
+
+            return redirect(url_for('estoque_consoles'))
+
+        #verificando se a requisição é do tipo post
         if request.method == 'POST':
+            # coletando os dados preenchidos no formulario
+            dados_form = request.form.to_dict()
 
+            #enviando dados para Model
+            newConsole = Console(
+                dados_form['nome'],
+                dados_form['fabricante'],
+                dados_form['ano'],
+                dados_form['preco'],
+                dados_form['quantidade']
+            )
+
+            #Método do SQLAlchemy para grravar os dados no banco
+            db.session.add(newConsole)
+
+            #confirmando a alteração no banco
+            db.session.commit()
+
+            #redirecionando o usuario para a pagina de estoque
+            return redirect(url_for('estoque_consoles'))
+
+        #selecionando toddos os console do banco
+        #select * from games
+        consoles = Console.query.all()
+
+        return render_template('estoque-consoles.html', consoles=consoles)
+
+    @app.route("/cadastro", methods=['GET', 'POST'])
+    def cadastro():
+        if request.method =='POST':
             email = request.form['email']
             senha = request.form['senha']
 
-            senha_com_hash = generate_password_hash(
-                senha,
-                method='scrypt'
-            )
+            senha_criptografia = generator_password_hash(senha, method='scrypt')
 
-            novo_usuario = Usuario(
-                email=email,
-                senha=senha_com_hash
-            )
+            #enviando para o model
+            novo_usuario = Usuario(email=email, senha=senha_criptografia)
 
+            #jogando no banco
             db.session.add(novo_usuario)
             db.session.commit()
 
-            flash('Cadastro realizado com sucesso!', 'success')
-
+            #validar os dados
+            #salvar os dados no banco de dados
             return redirect(url_for('login'))
 
         return render_template('cadastro.html')
 
-    # ROTA DE LOGIN
     @app.route('/login', methods=['GET', 'POST'])
     def login():
+        return "Bem-vindo a página de login"
 
-        if request.method == 'POST':
-
-            email = request.form['email']
-            senha = request.form['senha']
-
-            usuario = Usuario.query.filter_by(
-                email=email
-            ).first()
-
-            if usuario:
-
-                if check_password_hash(
-                    usuario.senha,
-                    senha
-                ):
-                    session['usuario_id'] = usuario.id
-                    session['usuario_email'] = usuario.email
-
-                    flash(
-                        'Login realizado com sucesso!',
-                        'success'
-                    )
-
-                    return redirect(url_for('home'))
-
-                flash('Senha incorreta!', 'danger')
-
-            else:
-                flash('Usuário não encontrado!', 'danger')
-
-        return render_template('login.html')
-    
-    @app.route('/apigames', methods=['GET', 'POST'])
-    def apigames():
+    # ROTA DE CONSUMO DA API
+    @app.route('/apigames', methods=['GET','POST'])
+    @app.route('/apigames/<int:id>', methods=['GET','POST'])
+    def apigames(id=None):
         urlAPI = 'https://www.freetogame.com/api/games'
+
         resposta = urllib.request.urlopen(urlAPI)
+
         dados = resposta.read()
-        # Convertendo dados de JSON para dicionário
+
         listaJogos = json.loads(dados)
-        return render_template('apigames.html', listaJogos = listaJogos)
+
+        if id:
+            jogoInfo = []
+
+            for jogo in listaJogos:
+                if jogo['id'] == id:
+                    jogoInfo = jogo
+                    break
+
+            if jogoInfo:
+                return render_template('gameinfo.html', jogoInfo=jogoInfo)
+            else:
+                return f'jogo com a ID {id} não foi encontrado.'
+
+        else:
+            return render_template(
+                'apigames.html',
+                listaJogos=listaJogos
+            )

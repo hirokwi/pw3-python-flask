@@ -1,58 +1,51 @@
-# Comentário no Python
-# Importando o Flask para a aplicação
-import pymysql.cursors
+# Comentário em Python
+# Importando o Flask na aplicação
 from flask import Flask, render_template
-# Importando PYMYSQL
+# render_template renderiza as páginas HTML
+from controllers import routes
+# Importando o PyMySQL
 import pymysql
-# Importando o SQLAlchemy e o Model
+# Importando o Model de Games
 from models.database import db, Game
 
-# Definindo um nome para o banco
-DB_NAME = 'thegames'
-
-# Importando o Controller (rotas)
-from controllers import routes
-
-# Carregando o Flask na variável "app"
+# Carregando o Flask em uma variável
 app = Flask(__name__, template_folder='views')
-# Variáveis com __ são variáveis de ambiente do Python
-# __name__ representa o nome da aplicação
-app.config['SECRET_KEY'] = 'meusegredo' # Variável de ambiente para o Flask, usada para criptografar os dados
+# __name__ é uma variável de ambiente do Python que tem o nome do módulo atual.
 
-app.config['PERMANENT_SESSION_LIFETIME'] = 3600 # Variável de ambiente para o Flask, usada para definir o tempo de vida da sessão (em segundos) 
+# Definindo o nome do banco de dados
+DB_NAME = 'thegames'
 # Passando o nome do banco para o Flask
 app.config['DATABASE_NAME'] = DB_NAME
 # Passando o endereço do banco para o Flask-SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://root@localhost/{DB_NAME}'
 
-# Enviando a variável app para as rotas
+# Enviando a variável APP (FLASK) para as rotas.
 routes.init_app(app)
 
-# Iniciando o servidor na porta 5000
+# Iniciando o servidor web
 if __name__ == '__main__':
-    # Conectando-se ao MYSQL para criar o banco de dados
-    # Passando os dados de conexão
+    # Passando os dados e criando a conexão com o banco
     connection = pymysql.connect(host='localhost',
                                  user='root',
                                  password='',
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
-    # Tentando a conexão
+    # Tentando a conexão com o banco
     try:
         with connection.cursor() as cursor:
-            # Enviando a QUERY para criar o banco
-            cursor.execute(f'CREATE DATABASE IF NOT EXISTS {DB_NAME}')
-            print("O banco de dados está criado!")
+            # Cria o banco se ele não existir
+            cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
+            print("O banco de dados foi criado com sucesso!")
     except Exception as error:
-        print(f"Ocorreu um erro ao criar o banco de dados! {error}")
+        print(f"Erro ao criar o banco de dados: {error}")
     # Fechando a conexão
     finally:
-        connection.close()
-    # Inicializando o FLASK-SQLALCHEMY
+        connection.close() 
+    # Inicializar o SQLAlchemy    
     db.init_app(app=app)
-    # Enviando a requisição para criar as tabelas
     with app.test_request_context():
+        # Criando as tabelas
         db.create_all()    
-    # Inicializando o servidor:
-    app.run(port=5000, debug=True) # O método .run() inicia o servidor
-
+    # Inicia o servidor
+    app.run(debug=True)  
+    # Ligando o Modo de Depuração (reinicia automático)
