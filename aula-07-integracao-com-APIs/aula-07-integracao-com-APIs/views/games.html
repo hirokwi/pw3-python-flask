@@ -1,11 +1,10 @@
-<!-- Importando o template base -->
 {% extends 'base.html' %}
 
 {% block content %}
-
 <main>
-    <h1>Jogos em destaque</h1>
-    <hr>
+
+<h1>Jogos em destaque</h1>
+<hr>
 
     <ul>
         <li>Título: {{ titulo }}</li>
@@ -13,30 +12,28 @@
         <li>Categoria: {{ categoria }}</li>
     </ul>
 
-    <p>O jogo {{titulo}} tem {{ 2026 - ano }} ano.</p>
+    <p>O jogo {{ titulo }} tem {{ 2026 - ano}} ano.</p>
 
     <h3>Top Players - Ranking</h3>
 
     <ol>
-        <!-- FOR PARA EXIBIR LISTAS (VETORES) -->
+        <!-- FOR para exibir listas (vetores) -->
         {% for jogador in jogadores %}
-            <li>{{ jogador }}</li>
+        <li>{{ jogador }}</li>
         {% endfor %}
     </ol>
 
-    <hr>
-
     <h3>Jogo do ano:</h3>
-
-    <!-- FOR PARA EXIBIR OBJETO (DICIONÁRIO) -->
+    <!-- FOR para exibir objeto (dicionário) -->
      {% for chave, valor in game.items() %}
-        <details>
-            <summary>{{chave}}</summary>
-            <p>{{valor}}</p>
-        </details>
+     <details>
+        <summary>{{chave}}</summary>
+        <p>{{valor}}</p>
+    </details>
      {% endfor %}
 
-    <p><a href="/">Voltar</a></p>
-</main>
 
+<p><a href="/">Voltar</a></p>
+
+</main>
 {% endblock content %}

@@ -1,32 +1,33 @@
-/* Seletor universal */
+/* Seletor universal asterisco */
 * {
-  margin: 0;
-  padding: 0;
+    margin:0;
+    padding:0;
 }
 
-/* Estilos gerais */
+/*Estilos gerais*/
 body {
-  font-family: "Segoe UI";
-  color: #222;
-  background-color: #f6f7f9;
-  /* Altura da linha */
-  line-height: 1.6;
+    font-family: "Segoe UI";
+    color: #222;
+    background-color: #f6f7f9;
+    /*Altura da linha*/
+    line-height: 1.6;
 }
-/* Cabeçalho */
+
+/*Cabeçalho*/
 header {
-  background-color: #1b1b1b;
-  color: white;
-  padding: 0.5rem;
-  text-align: center;
+    background-color: #1b1b1b;
+    color: white;
+    padding: 0.5rem;
+    text-align: center;
 }
-/* Footer */
+/*footer*/
 footer {
-  background-color: #1b1b1b;
-  color: white;
-  margin-top: 2rem;
-  padding: 1rem 0.75rem;
+    background-color: #1b1b1b;
+    color: white;
+    margin-top: 2rem;
+    padding: 1rem 0.75rem;
 }
-/* Conteúdo central */
+/*Conteúdo central*/
 main {
     width: 1300px;
     min-height: 100vh;
@@ -34,13 +35,11 @@ main {
     padding: 1rem 3rem;
     background-color: #ffffff;
     border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
 }
-
-img {
+img{
     border-radius: 8px;
 }
-
 h1,h2,h3,p {
     padding: 10px;
 }
