@@ -1,0 +1,26 @@
+<!-- importando template base -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- buscando e exibindo as flash messages -->
+ {% with messages = get_flashed_messages(with_categories=true) %}
+ {% for category, message in messages %}
+ <div class="alert alert-{{ category }}">
+
+    {{ message }}
+ </div>
+ {% endfor %}
+ {% endwith %}
+<main>
+
+<h1>Bem-Vindo ao The Games</h1>
+ <h3>Seu Site favorito de jogos!</h3>
+ <!-- <hr>
+<p><a href="/games">Games</a></p>
+<p><a href="/consoles">Consoles</a></p>
+<hr> -->
+<img src="{{url_for('static', filename='/imgs/games.webp')}}" alt="The Games" width="720px">
+
+</main>
+{% endblock content %}
