@@ -1,27 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!-- CHAMANDO A LISTA DE JOGOS -->
-<div class="container" style="background-color: #f0f0f0; border-radius: 8px;">
-    <div class="row">
-        <!-- PERCORRENDO A LISTA DE JOGOS -->
-         {% for jogo in listaJogos %}
-         <div class="col-md-3 m-auto">
-            <div class="card" style="width: 16rem;">
-                <img src="{{jogo.thumbnail}}">
-                <div class="card-body">
-                    <h5>{{jogo.title}}</h5>
-                    <p>{{jogo.genre}}</p>
-                    <p>{{jogo.platform}}</p>
-                    <!-- BOTÃO DE MAIS INFORMAÇÕES -->
-                     <a href="{{url_for('apigames', id=jogo.id)}}" class="btn btn-dark">+ Informações</a>
-                    <!-- BOTÃO PARA INICIAR O JOGO -->
-                     <a href="{{jogo.game_url}}" target="_blank" class="btn btn-danger">Jogar</a>
+
+<div class="row">
+    {% for jogo in listaJogos %}
+    <div class="col-md-3 mb-4">
+        <div class="card h-100">
+            <img src="{{jogo.thumbnail}}" alt="{{jogo.title}}">
+            <div class="card-body d-flex flex-column">
+                <h5>{{jogo.title}}</h5>
+                <p>{{jogo.genre}}</p>
+                <p>{{jogo.platform}}</p>
+                <div class="mt-auto">
+                    <a href="{{url_for('apigames', id=jogo.id)}}" class="btn btn-dark">+ Informações</a>
+                    <a href="{{jogo.game_url}}" target="_blank" class="btn btn-danger">Jogar</a>
                 </div>
             </div>
         </div>
+    </div>
     {% endfor %}
-   </div>
 </div>
 
 {% endblock content %}

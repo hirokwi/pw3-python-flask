@@ -1,26 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2 style="text-align: center;">Galeria de fotos</h2><br>
+<h2 style="text-align: center">Galeria de fotos</h2>
+<br />
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }}">{{ message }}</div>
+{% endfor %}
+{% endwith %}
 
-        {{ message }}
+<div class="row">
+    {% for imagem in imagens %}
+    <div class="col-md-3 mb-3">
+        <img src="/static/uploads/{{ imagem.filename }}" alt="" class="img-thumbnail w-100" />
     </div>
     {% endfor %}
-    {% endwith %}
+</div>
 
-<div class="container col-6">
-    <div class="card mt-4">
+<div class="container-form mt-4">
+    <div class="card">
         <div class="card-body">
             <form action="{{ url_for('galeria') }}" method="POST" enctype="multipart/form-data">
                 <label>Envie sua imagem:</label>
-                <input type="file" name="file" class="form-control" required><br>
-                <button type="submit" class="btn btn-danger btn-block">Fazer upload</button>
-                </form>
+                <input type="file" name="file" class="form-control" required />
+                <button type="submit" class="btn btn-danger btn-block mt-3">Fazer upload</button>
+            </form>
         </div>
     </div>
+</div>
 
 {% endblock content %}

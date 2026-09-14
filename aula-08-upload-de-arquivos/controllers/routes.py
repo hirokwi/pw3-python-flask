@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for, flash, session
 #importando o markup safe
 from markupsafe import Markup
 #importando o model game e o  sqlalchemy
-from models.database import Game, Console, db, Usuario 
+from models.database import Game, Console, db, Usuario, Imagem
 #importando werkzeug
 from werkzeug.security import generate_password_hash, check_password_hash
 #importando a biblioteca URLLIB
@@ -22,7 +22,7 @@ def init_app(app):
     @app.before_request
     def check_auth():
         #rotas que nao precisam de autenticação
-        rotasPermitidas = ['home', 'login', 'cadastro', 'static']
+        rotasPermitidas = ['home', 'login', 'cadastro', 'static', 'galeria', 'upload']
         
         # se a rota da requisição nao requer autenticação, permitir acesso
         if request.endpoint in rotasPermitidas:
@@ -295,6 +295,8 @@ def init_app(app):
             # ROTA DE UPLOAD (GALERIA DE FOTOS)
     @app.route('/galeria', methods=['GET', 'POST'])
     def galeria():
+        
+        imagens = Imagem.query.all()
         # LISTA DE EXTENSÕES PERMITIDAS
         FILE_TYPES = set(['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'])
         # FUNÇÃO PARA VALIDAR O TIPO DE ARQUIVO ENVIADO
@@ -313,10 +315,13 @@ def init_app(app):
          # SE A EXTENSÃO FOR VÁLIDA
          #Gere um nome aleatório para o arquivo
          filename = str(uuid.uuid4())
+         
+         imagem = Imagem(filename)
+         db.session.add(imagem)
+         db.session.commit()
          # Salva o arquivo no servidor (na pasta uploads)
          file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
          flash("Imagem recebida com sucesso!", 'success')
          return redirect(url_for('galeria'))
         
-        return render_template('galeria.html')
-        
+        return render_template('galeria.html', imagens=imagens)

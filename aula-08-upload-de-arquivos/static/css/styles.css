@@ -1,45 +1,314 @@
-/* Seletor universal asterisco */
+/* ============================================================
+   RESET + BASE
+   ============================================================ */
 * {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/*Estilos gerais*/
 body {
-    font-family: "Segoe UI";
+    font-family: "Segoe UI", sans-serif;
     color: #222;
     background-color: #f6f7f9;
-    /*Altura da linha*/
     line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-/*Cabeçalho*/
+/* ============================================================
+   HEADER
+   ============================================================ */
 header {
     background-color: #1b1b1b;
     color: white;
-    padding: 0.5rem;
+    padding: 1rem;
     text-align: center;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
-/*footer*/
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.navbar {
+    margin: 1rem auto 0;
+    width: 90%;
+    max-width: 1300px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ============================================================
+   MAIN (cartão branco central)
+   ============================================================ */
+main {
+    width: 90%;
+    max-width: 1300px;
+    flex: 1;
+    margin: 2rem auto;
+    padding: 2rem 3rem;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
 footer {
     background-color: #1b1b1b;
     color: white;
     margin-top: 2rem;
-    padding: 1rem 0.75rem;
+    padding: 1.5rem 1rem;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
-/*Conteúdo central*/
-main {
-    width: 1300px;
-    min-height: 100vh;
-    margin: 1.5rem auto;
-    padding: 1rem 3rem;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+
+footer p {
+    margin: 0;
 }
-img{
-    border-radius: 8px;
+
+/* ============================================================
+   ELEMENTOS GERAIS
+   ============================================================ */
+img {
+    border-radius: 16px;
+    max-width: 100%;
+    height: auto;
 }
-h1,h2,h3,p {
-    padding: 10px;
+
+h1, h2, h3 {
+    margin-bottom: 0.75rem;
+    padding: 0;
+}
+
+p {
+    margin-bottom: 0.75rem;
+}
+
+hr {
+    margin: 1.5rem 0;
+    border: none;
+    border-top: 1px solid #e0e0e0;
+}
+
+a {
+    transition: opacity 0.2s ease;
+}
+
+a:hover {
+    opacity: 0.8;
+}
+
+/* ============================================================
+   FORMULÁRIOS
+   ============================================================ */
+form {
+    margin-bottom: 1rem;
+}
+
+form label,
+.form-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    margin-top: 0.8rem;
+    font-weight: 500;
+    color: #333;
+}
+
+form label:first-child {
+    margin-top: 0;
+}
+
+.form-control,
+input,
+select,
+textarea {
+    border-radius: 12px !important;
+    padding: 0.6rem 1rem !important;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ddd;
+}
+
+.form-control:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #1b1b1b;
+    box-shadow: 0 0 0 3px rgba(27,27,27,0.1);
+}
+
+/* Formulário com largura confortável */
+.container-form,
+.form-narrow {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ============================================================
+   BOTÕES
+   ============================================================ */
+button,
+.btn {
+    border-radius: 12px !important;
+    padding: 0.55rem 1.3rem;
+    font-weight: 500;
+    margin-right: 0.4rem;
+    margin-top: 0.4rem;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+    margin-right: 0;
+}
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.card {
+    border-radius: 16px !important;
+    overflow: hidden;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 1rem;
+}
+
+.card-header {
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+    padding: 1rem 1.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* ============================================================
+   TABELAS
+   ============================================================ */
+table {
+    border-collapse: separate;
+    border-spacing: 0 6px;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+table th,
+table td {
+    padding: 12px 16px;
+    vertical-align: middle;
+}
+
+table thead th {
+    border-radius: 12px;
+}
+
+table tbody tr {
+    background-color: #fff;
+    transition: background-color 0.15s ease;
+}
+
+table tbody tr:hover {
+    background-color: #f6f7f9;
+}
+
+table.table-bordered {
+    border: none;
+}
+
+table.table-bordered th,
+table.table-bordered td {
+    border: 1px solid #eee;
+}
+
+/* ============================================================
+   ALERTAS
+   ============================================================ */
+.alert {
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+}
+
+/* ============================================================
+   DETAILS / SUMMARY
+   ============================================================ */
+details {
+    background-color: #f6f7f9;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0.3rem 0;
+    user-select: none;
+}
+
+details[open] summary {
+    margin-bottom: 0.8rem;
+}
+
+/* ============================================================
+   LISTAS
+   ============================================================ */
+ul, ol {
+    padding-left: 1.5rem;
+}
+
+li {
+    margin-bottom: 0.4rem;
+}
+
+/* ============================================================
+   GALERIA
+   ============================================================ */
+.img-thumbnail {
+    border-radius: 16px !important;
+    border: 1px solid #eee;
+    padding: 6px;
+    background-color: #fff;
+    transition: transform 0.2s ease;
+}
+
+.img-thumbnail:hover {
+    transform: scale(1.02);
+}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width: 768px) {
+    main {
+        width: 95%;
+        padding: 1.5rem 1rem;
+        margin: 1rem auto;
+    }
+
+    header {
+        padding: 0.75rem;
+    }
+
+    header img {
+        width: 200px !important;
+    }
+
+    .navbar {
+        width: 95%;
+    }
+
+    table {
+        font-size: 0.85rem;
+    }
+
+    table th,
+    table td {
+        padding: 8px 10px;
+    }
 }

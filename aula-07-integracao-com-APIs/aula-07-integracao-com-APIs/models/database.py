@@ -53,3 +53,13 @@ class Usuario(db.Model):
     def __init__(self, email, senha):
         self.email = email
         self.senha = senha
+        
+        # tabela de imagens
+    class Imagem(db.Model):
+            # atributos
+            id = db.Column(db.Integer, primary_key=True)
+            filename = db.Column(db.String(255), unique=True, nullable=False)
+            
+            #função construtora
+            def __init__(self, filename):
+                self.filename = filename

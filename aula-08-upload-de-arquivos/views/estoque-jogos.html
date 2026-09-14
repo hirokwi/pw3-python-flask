@@ -2,39 +2,49 @@
 
 {% block content %}
 
-<!-- Formulario de cadastro -->
- <details>
+<details>
     <summary>[ Cadastrar um novo jogo ]</summary>
-    <div class="col-md-4">
+    <div class="container-form">
         <form action="{{url_for('estoque_jogos')}}" method="POST">
+            <label>Título</label>
             <input type="text" name="titulo" placeholder="Título" class="form-control" required>
+
+            <label>Ano</label>
             <input type="number" name="ano" placeholder="Ano" class="form-control" required>
+
+            <label>Categoria</label>
             <input type="text" name="categoria" placeholder="Categoria" class="form-control" required>
+
+            <label>Plataforma</label>
             <input type="text" name="plataforma" placeholder="Plataforma" class="form-control" required>
+
+            <label>Preço</label>
             <input type="number" name="preco" placeholder="Preço" class="form-control" required>
+
+            <label>Quantidade</label>
             <input type="number" name="quantidade" placeholder="Quantidade" class="form-control" required>
-            <br>
-            <input type="submit" value="Cadastrar" class="btn btn-success">
-            <input type="reset" value="Limpar" class="btn btn-danger">
-            
+
+            <div class="d-flex gap-2 mt-3">
+                <input type="submit" value="Cadastrar" class="btn btn-success">
+                <input type="reset" value="Limpar" class="btn btn-danger">
+            </div>
         </form>
     </div>
- </details>
+</details>
 
-<!-- TABELA DE JOGOS -->
- <h2>Controle de Estoque</h2>
- <table class="table table-bordered table-hover">
+<h2>Controle de Estoque</h2>
+<table class="table table-bordered table-hover">
     <thead class="table-dark">
         <tr>
-        <th>Título</th>
-        <th>Ano</th>
-        <th>Categoria</th>
-        <th>Plataforma</th>
-        <th>Preço</th>
-        <th>Quantidade</th>
-        <th colspan="2" style="text-align: center;">Ações</th>
+            <th>Título</th>
+            <th>Ano</th>
+            <th>Categoria</th>
+            <th>Plataforma</th>
+            <th>Preço</th>
+            <th>Quantidade</th>
+            <th colspan="2" class="text-center">Ações</th>
         </tr>
-        </thead>
+    </thead>
     <tbody>
         {% for game in games %}
         <tr>
@@ -45,18 +55,14 @@
             <td>{{game.preco}}</td>
             <td>{{game.quantidade}}</td>
             <td>
-                <a href="{{url_for('editar_jogos', id=game.id)}}" class="btn btn-warning">
-                Editar
-                </a>
+                <a href="{{url_for('editar_jogos', id=game.id)}}" class="btn btn-warning btn-sm">Editar</a>
             </td>
             <td>
-                <a href="{{url_for('estoque_jogos', id=game.id)}}" class="btn btn-danger" onclick="return confirm('Deseja mesmo excluir o jogo?')">
-                    Deletar
-                </a>
+                <a href="{{url_for('estoque_jogos', id=game.id)}}" class="btn btn-danger btn-sm" onclick="return confirm('Deseja mesmo excluir o jogo?')">Deletar</a>
             </td>
         </tr>
         {% endfor %}
-            </tbody>
- </table>
+    </tbody>
+</table>
 
 {% endblock content %}
